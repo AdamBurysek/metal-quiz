@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import hlinik from "../img/hlinik.jpg";
+import React, { useState } from "react";
 
 const GamePage = () => {
   let [finalArray, setFinalArray] = useState([]);
   let [count, setCount] = useState(0);
-  let [showResult, setShowResult] = useState(true);
-  let [clicked, setClicked] = useState("Hliník");
+  let [showResult, setShowResult] = useState(false);
+  let [clicked, setClicked] = useState("");
+  let [rightAnswers, setRightAnswers] = useState(0);
+  let [badAnswers, setBadAnswers] = useState(0);
 
-  const kovy = ["Hliník", "Měď", "Nikl", "Olovo", "Titan", "Železo"];
+  const questionArray = ["Hliník", "Měď", "Nikl", "Olovo", "Titan", "Železo"];
 
   function shuffleQuestions(array, questionAnswer) {
     let answerInTopFour = false;
@@ -30,22 +31,33 @@ const GamePage = () => {
 
   function setQuestions() {
     let answer;
-    let kovyCopy;
-    for (let i = 0; i < kovy.length; i++) {
-      kovyCopy = [...kovy];
-      answer = [kovyCopy[i]];
-      let shuffle = shuffleQuestions(kovyCopy, answer);
+    let questionArrayCopy;
+    for (let i = 0; i < questionArray.length; i++) {
+      questionArrayCopy = [...questionArray];
+      answer = [questionArrayCopy[i]];
+      let shuffle = shuffleQuestions(questionArrayCopy, answer);
       finalArray.push({
         answer: answer.toString(),
         questions: shuffle,
         image: answer
           .toString()
           .toLowerCase()
-          .replace(/[ž]/g, "z")
-          .replace(/[š]/g, "s")
-          .replace(/[ě]/g, "e")
+          .replace(/[ ]/g, "_")
+          .replace(/[á]/g, "a")
+          .replace(/[č]/g, "c")
           .replace(/[ď]/g, "d")
-          .replace(/[í]/g, "i"),
+          .replace(/[é]/g, "e")
+          .replace(/[ě]/g, "e")
+          .replace(/[í]/g, "i")
+          .replace(/[ň]/g, "n")
+          .replace(/[ó]/g, "o")
+          .replace(/[ř]/g, "r")
+          .replace(/[š]/g, "s")
+          .replace(/[ť]/g, "t")
+          .replace(/[ú]/g, "u")
+          .replace(/[ů]/g, "u")
+          .replace(/[ý]/g, "y")
+          .replace(/[ž]/g, "z"),
         key: (i + 1) * new Date(),
         id: i,
       });
@@ -72,16 +84,24 @@ const GamePage = () => {
 
   const onSubmit = (btn, pageId) => {
     setClicked(btn);
-    if (btn === pageId.answer) console.log("heureka");
-    if (btn !== pageId.answer) console.log("smolik");
+    if (btn === pageId.answer) {
+      rightAnswers++;
+      setRightAnswers(rightAnswers);
+    }
+    if (btn !== pageId.answer) {
+      badAnswers++;
+      setBadAnswers(badAnswers);
+    }
+    setShowResult(true);
     setTimeout(pageSwitch, 1500);
   };
 
   const pageSwitch = () => {
     count--;
-    if (count * -1 > kovy.length - 1) {
+    if (count * -1 > questionArray.length - 1) {
       count = 0;
     }
+    setShowResult(false);
     setCount(count);
   };
 
@@ -113,6 +133,7 @@ const GamePage = () => {
                         return (
                           <li key={btn}>
                             <button
+                              disabled={showResult ? true : false}
                               key={btn}
                               onClick={() => onSubmit(btn, finalArray[page.id])}
                               className={
@@ -125,6 +146,10 @@ const GamePage = () => {
                                     showResult === true &&
                                     btn === clicked
                                   ? "q_button btn_wrong"
+                                  : "q_button " &&
+                                    showResult === true &&
+                                    btn !== clicked
+                                  ? "q_button btn_blur"
                                   : "q_button "
                               }
                             >
