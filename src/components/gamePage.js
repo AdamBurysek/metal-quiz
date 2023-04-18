@@ -1,4 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { shuffleQuestions, shuffleAnswers } from "../utils/randomizeQuiz";
+import { Link } from "react-router-dom";
+import {
+  getImageUrl,
+  translatePage,
+  slidesWidth,
+  slidePage,
+} from "../utils/quizFunctions";
 
 const GamePage = () => {
   let [finalArray, setFinalArray] = useState([]);
@@ -10,33 +18,17 @@ const GamePage = () => {
 
   const questionArray = ["Hliník", "Měď", "Nikl", "Olovo", "Titan", "Železo"];
 
-  function shuffleQuestions(array, questionAnswer) {
-    let answerInTopFour = false;
-    while (!answerInTopFour) {
-      for (let i = 0; i < array.length; i++) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-
-      let topFour = array.slice(0, 4);
-
-      for (let i = 0; i < topFour.length; i++) {
-        if (topFour[i] == questionAnswer) {
-          answerInTopFour = true;
-        }
-      }
-    }
-    return array.slice(0, 4);
-  }
-
   function setQuestions() {
     let answer;
-    let questionArrayCopy;
+    let questionArrayCopy = [];
+    let newArray = [];
+    let shuffledQuestions = [];
+    shuffledQuestions = shuffleQuestions(questionArray);
     for (let i = 0; i < questionArray.length; i++) {
-      questionArrayCopy = [...questionArray];
+      questionArrayCopy = [...shuffledQuestions];
       answer = [questionArrayCopy[i]];
-      let shuffle = shuffleQuestions(questionArrayCopy, answer);
-      finalArray.push({
+      let shuffle = shuffleAnswers(questionArrayCopy, answer);
+      newArray.push({
         answer: answer.toString(),
         questions: shuffle,
         image: answer
@@ -62,25 +54,13 @@ const GamePage = () => {
         id: i,
       });
     }
+    setFinalArray(newArray);
   }
 
-  setQuestions();
-
-  function getImageUrl(array) {
-    return require("../img/" + array.image + ".jpg");
-  }
-
-  function translatePage(id) {
-    return "translateX(" + id * 100 + "%)";
-  }
-
-  function slidesWidth(array) {
-    return array.length * 100 + "%";
-  }
-
-  function slidePage(num) {
-    return num * 100 + "%";
-  }
+  useEffect(() => {
+    setQuestions();
+    // eslint-disable-next-line
+  }, []);
 
   const onSubmit = (btn, pageId) => {
     setClicked(btn);
@@ -99,7 +79,7 @@ const GamePage = () => {
   const pageSwitch = () => {
     count--;
     if (count * -1 > questionArray.length - 1) {
-      count = 0;
+      count = questionArray.length * -1;
     }
     setShowResult(false);
     setCount(count);
@@ -110,7 +90,10 @@ const GamePage = () => {
       <div className="screen_crop">
         <div
           className="slide"
-          style={{ width: slidesWidth(finalArray), left: slidePage(count) }}
+          style={{
+            width: slidesWidth(questionArray.length + 1),
+            left: slidePage(count),
+          }}
         >
           {finalArray.map((page) => {
             return (
@@ -164,7 +147,26 @@ const GamePage = () => {
               </div>
             );
           })}
-          ;
+          ;{/* final page */}
+          <div
+            className="section section_end"
+            style={{ transform: translatePage(questionArray.length) }}
+          >
+            <div className="main-page_header">
+              <h1 className="quiz_end">Výsledek</h1>
+              <h3 className="quiz_results right_answers">
+                Správných odpovědí:
+              </h3>
+              <h3 className="quiz_results right_answers">{rightAnswers}</h3>
+              <h3 className="quiz_results wrong_answers">Špatných odpovědí:</h3>
+              <h3 className="quiz_results wrong_answers">{badAnswers}</h3>
+              <Link style={{ height: "0" }} to={"/"}>
+                <button className="btn_exit">Exit</button>
+              </Link>
+            </div>
+            <div className="end_results-container"></div>
+          </div>
+          {/* final page */}
         </div>
       </div>
     </div>
