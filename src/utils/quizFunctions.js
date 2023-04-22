@@ -1,5 +1,5 @@
 export function getImageUrl(array) {
-  return require("../img/" + array.image + ".jpg");
+  return require("../img/" + array.image + ".webp");
 }
 
 export function translatePage(id) {

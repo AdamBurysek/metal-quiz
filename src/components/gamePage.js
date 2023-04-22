@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { shuffleQuestions, shuffleAnswers } from "../utils/randomizeQuiz";
-import { Link } from "react-router-dom";
 import {
   getImageUrl,
   translatePage,
   slidesWidth,
   slidePage,
 } from "../utils/quizFunctions";
+import ResultsPage from "./resultsPage";
 
 const GamePage = () => {
   let [finalArray, setFinalArray] = useState([]);
@@ -119,11 +119,15 @@ const GamePage = () => {
                               disabled={showResult ? true : false}
                               key={btn}
                               onClick={() => onSubmit(btn, finalArray[page.id])}
+                              // prettier-ignore
                               className={
                                 btn === finalArray[page.id].answer &&
-                                showResult === true &&
-                                btn === clicked
-                                  ? "q_button btn_right"
+                                showResult === true 
+                                // ↓ COMMENT OR DELETE THIS CODE FOR SHOW RIGHT ANSWERS
+                                && btn === clicked
+                                // ↑ COMMENT OR DELETE THIS CODE FOR SHOW RIGHT ANSWERS
+                                  ?
+                                    "q_button btn_right"
                                   : "q_button " &&
                                     btn !== finalArray[page.id].answer &&
                                     showResult === true &&
@@ -147,26 +151,11 @@ const GamePage = () => {
               </div>
             );
           })}
-          ;{/* final page */}
-          <div
-            className="section section_end"
-            style={{ transform: translatePage(questionArray.length) }}
-          >
-            <div className="main-page_header">
-              <h1 className="quiz_end">Výsledek</h1>
-              <h3 className="quiz_results right_answers">
-                Správných odpovědí:
-              </h3>
-              <h3 className="quiz_results right_answers">{rightAnswers}</h3>
-              <h3 className="quiz_results wrong_answers">Špatných odpovědí:</h3>
-              <h3 className="quiz_results wrong_answers">{badAnswers}</h3>
-              <Link style={{ height: "0" }} to={"/"}>
-                <button className="btn_exit">Exit</button>
-              </Link>
-            </div>
-            <div className="end_results-container"></div>
-          </div>
-          {/* final page */}
+          <ResultsPage
+            questionArray={questionArray}
+            rightAnswers={rightAnswers}
+            badAnswers={badAnswers}
+          />
         </div>
       </div>
     </div>

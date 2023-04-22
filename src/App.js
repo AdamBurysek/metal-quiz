@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import GamePage from "./components/gamePage";
 import StartPage from "./components/startPage";
-import ResultsPage from "./components/resultsPage";
+import NotFound from "./components/notFound";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/game" element={<GamePage />} />
-        <Route path="/results" element={<ResultsPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
