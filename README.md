@@ -10,6 +10,7 @@ HTML
 CSS
 
 
+![Snímek obrazovky 2023-10-28 v 18 18 12](https://github.com/AdamBurysek/metal-quiz/assets/114564710/9a04c996-72f1-4633-b717-9629e490e22d)
 
 
 #
