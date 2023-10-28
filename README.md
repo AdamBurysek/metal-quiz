@@ -1,3 +1,15 @@
+Úkol na přijímací pohovor - VIDA Science Centre
+Úkolem je vytvořit jednoduchou React aplikaci, která bude sloužit jako kvíz. ZDE jsou k dispozici obrázky, které budou využity pro účely kvízu. Pro každý kov jsou k dispozici dva obrázky, který použijete je na vás. Úkolem uživatele bude odpovědět na otázku o jaký kov se jedná, nápovědou budou zmíněné obrázky. Po zvolení možnosti bude uživateli zobrazena informace o tom, zda byla jeho odpověď správná či špatná. Celkový počet otázek v kvízu bude odpovídat počtu kovů. Po vyplnění všech otázek bude zobrazena statistika, která ukáže počet správných a špatných odpovědí. Pokud bude aplikace obsahovat nějaké animace, bude to považováno za bonus.
+
+Použité technologie budou následující:
+
+React
+Javascript, případně Typescript jako výhoda
+HTML
+CSS
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
